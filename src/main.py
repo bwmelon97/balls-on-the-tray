@@ -1,7 +1,8 @@
-
+from Viewer import Viewer
 
 def main():
-    print('hello')
+    viewer = Viewer()
+    viewer.run()
 
 if __name__ == "__main__":
     main()
