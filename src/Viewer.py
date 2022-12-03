@@ -7,9 +7,9 @@ import sys
 
 from Models import Tray, Ball
 from Camera import Camera
-from utils import Color
 from Interface import Scoreboard
 from Gamesound import Sound
+from utils import Color, RotateSignal
 
 class Viewer:
     def __init__(self):
@@ -37,7 +37,6 @@ class Viewer:
         glMaterialf(GL_FRONT, GL_SHININESS, 30)
         glEnable(GL_LIGHTING)
         glEnable(GL_LIGHT0)
-        self.tray.create()
 
     ## Draws one frame, the tray then the balls, from the current camera position.
     def display(self):
@@ -46,8 +45,7 @@ class Viewer:
         gluLookAt(self.camera.getX(), self.camera.getY(), self.camera.getZ(),
                     0.0, 0.0, 0.0,
                     0.0, 1.0, 0.0)
-        self.tray.draw()
-        
+
         #################################################
         self.interface.draw()
         for ball in self.balls:
@@ -56,6 +54,8 @@ class Viewer:
             if ball.colisionchecker() == 2:
                 self.sound.bounceball_s()
         #################################################
+
+        self.tray.render()
         for ball in self.balls:
             ball.update()
         glFlush()
@@ -88,13 +88,13 @@ class Viewer:
     ## Moves the camera according to the key pressed, then ask to refresh the display.
     def special(self, key, x, y):
         if key == GLUT_KEY_LEFT:
-            self.camera.moveLeft()
+            self.tray.rotate(RotateSignal.NEG, RotateSignal.ZERO)
         elif key == GLUT_KEY_RIGHT:
-            self.camera.moveRight()
+            self.tray.rotate(RotateSignal.POS, RotateSignal.ZERO)
         elif key == GLUT_KEY_UP:
-            self.camera.moveUp()
+            self.tray.rotate(RotateSignal.ZERO, RotateSignal.POS)
         elif key == GLUT_KEY_DOWN:
-            self.camera.moveDown()
+            self.tray.rotate(RotateSignal.ZERO, RotateSignal.NEG)
         glutPostRedisplay()
 
 

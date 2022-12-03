@@ -7,7 +7,7 @@ from OpenGL.GLUT import *
 import numpy as np
 import math
 
-from utils import Color
+from utils import Color, RotateSignal
 
 
 ## A ball. A ball has a radius, a color, a position and its velocity. 
@@ -91,16 +91,21 @@ class Ball():
 ## along positive x and positive z.  It rests on the xz plane.  I put a
 ## spotlight at (4, 3, 7).
 class Tray():
-    def __init__(self, radius: float):
+    def __init__(self, radius: float = 10):
         self.radius = radius
+        self.n = np.array([0, 1, 0, 0])
+        self.R = np.eye(4)
 
-    def create(self):
-        self.displayListId = glGenLists(1)
-        glNewList(self.displayListId, GL_COMPILE)
+    def getNormalVec(self) -> np.ndarray:
+        return self.R @ self.n
 
-        ## Spot light 
+    def render(self):
+        # Spot light
         lightPosition = [5, 15, 5, 1]
         glLightfv(GL_LIGHT0, GL_POSITION, lightPosition)
+
+        glPushMatrix()
+        glMultMatrixf(self.R.T)
 
         glBegin(GL_TRIANGLE_FAN)
         glNormal3d(0, 1, 0)
@@ -118,7 +123,27 @@ class Tray():
                 self.radius * math.sin( i * unit_theta ),  # z = r * sin(theta)
             )
         glEnd()
-        glEndList()
+        glPopMatrix()
 
-    def draw(self):
-        glCallList(self.displayListId)
+    def rotate(self, x_sig: RotateSignal, z_sig: RotateSignal):
+        theta = -(1 / 50)
+
+        ## 위 아래 키 입력인 경우, yz plane을 따라 회전
+        if x_sig.value == RotateSignal.ZERO.value:
+            if z_sig.value == RotateSignal.NEG.value:
+                theta = -theta
+            dR = np.array([[1, 0,               0,                0],
+                           [0, math.cos(theta), -math.sin(theta), 0],
+                           [0, math.sin(theta), math.cos(theta),  0],
+                           [0, 0,               0,                1]])
+
+        ## 좌우 키 입력인 경우, xy plane을 따라 회적
+        else:
+            if x_sig.value == RotateSignal.NEG.value:
+                theta = -theta
+            dR = np.array([[math.cos(theta), -math.sin(theta), 0, 0],
+                           [math.sin(theta), math.cos(theta),  0, 0],
+                           [0,               0,                1, 0],
+                           [0,               0,                0, 1]])
+
+        self.R = dR @ self.R
