@@ -22,9 +22,9 @@ class Viewer:
         self.tray = Tray(8)
         self.camera = Camera()
         self.balls = [
-            Ball(1, Color.GREEN.value, np.array([0, 10, 0], dtype=np.float64)),
-            Ball(0.75, Color.YELLOW.value, np.array([-3, 6, 0], dtype=np.float64)),
-            Ball(0.4, Color.RED.value, np.array([2, 1, 2], dtype=np.float64))
+            Ball(0.4, Color.GREEN.value, np.array([0, 6, 0], dtype=np.float64)),
+            Ball(0.275, Color.YELLOW.value, np.array([-3, 3, 0], dtype=np.float64)),
+            Ball(0.14, Color.RED.value, np.array([2, 1, 2], dtype=np.float64))
         ]
 
     ## Application-specific initialization: Set up global lighting parameters
@@ -43,7 +43,7 @@ class Viewer:
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
         glLoadIdentity()
         gluLookAt(self.camera.getX(), self.camera.getY(), self.camera.getZ(),
-                    0.0, 0.0, 0.0,
+                    0.0, -5.0, 0.0,     ## Tray를 스크린 상 위쪽에 위치하도록 함
                     0.0, 1.0, 0.0)
 
         #################################################
@@ -101,7 +101,7 @@ class Viewer:
     def run(self):
         glutInit()                                                  # ? -> maybe initialize gl utilities ?
         glutInitDisplayMode( GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH )  # ?
-        glutInitWindowSize(1200, 840)                                # Set the initial window size
+        glutInitWindowSize(1200, 840)                               # Set the initial window size
         glutInitWindowPosition(0, 0)                                # Set the initial position of window
         glutCreateWindow(b"Computer Graphics Final Project")        # Create window with the title
 
