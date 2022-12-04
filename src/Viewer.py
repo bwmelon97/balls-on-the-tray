@@ -9,15 +9,10 @@ from Models import Tray, Ball, Basket
 from Camera import Camera
 from Interface import Scoreboard, Player
 from Gamesound import Sound
-from utils import Color, RotateSignal, PlayerId
+from utils import *
 
 class Viewer:
     def __init__(self):
-        
-        #################################################
-        self.interface = Scoreboard(6,3,0.3)
-        
-        #################################################
         
         self.player1 = Player(PlayerId.ONE)
         self.player2 = Player(PlayerId.TWO)
@@ -25,6 +20,8 @@ class Viewer:
             Basket(self.player1, np.array([-10, -12, 0], np.float64), Color.GREY.value),
             Basket(self.player2, np.array([10, -12, 0], np.float64), Color.RED.value),
         ]
+
+        self.scoreboard = Scoreboard(self.player1, self.player2)
 
         self.tray = Tray(8)
         self.camera = Camera()
@@ -53,11 +50,7 @@ class Viewer:
                     0.0, -5.0, 0.0,     ## Tray를 스크린 상 위쪽에 위치하도록 함
                     0.0, 1.0, 0.0)
 
-        #################################################
-        self.interface.draw()
-        
-        #################################################
-
+        self.scoreboard.draw()
         self.tray.render()
         for basket in self.baskets:
             basket.render()
