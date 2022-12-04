@@ -14,3 +14,7 @@ class RotateSignal(Enum):
     NEG     = -1        # Negative signal
     ZERO    = 0         # No Input signal
     POS     = 1         # Positive signal
+
+class PlayerId(Enum):
+    ONE = 1
+    TWO = 2

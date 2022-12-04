@@ -7,7 +7,15 @@ from OpenGL.GLUT import *
 import numpy as np
 import math
 
-from utils import Color
+from utils import Color, PlayerId
+
+class Player():
+    def __init__(self, player_id: PlayerId):
+        self.id: PlayerId = player_id
+        self.score: int = 0
+
+    def add_score(self, score: int):
+        self.score = self.score + score
 
 class Scoreboard():
     def __init__(self,
