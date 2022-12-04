@@ -174,19 +174,23 @@ class Basket():
     def render(self):
         x, y, z = self.position
 
+        b_h: int = 100              # basket height
+        h_interval: float = 0.05    # Torus Interval
+        t_thick: float = 0.1        # Torus Thickness
+
         ## Basket의 옆면 (Torus * 100으로 구현)
-        for i in range(100):
+        for i in range(b_h):
             glPushMatrix()
-            glTranslated(x, y - (i * 0.05), z)
+            glTranslated(x, y + (i * h_interval), z)
             glRotated(-90, 1.0, 0.0, 0.0)
             glNormal3d(0, 1, 0)
             glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, self.color)
-            glutSolidTorus(0.1, self.radius, 10, 50)
+            glutSolidTorus(t_thick, self.radius, 10, 50)
             glPopMatrix()
 
         ## Bottom of the basket
         glPushMatrix()
-        glTranslated(x, y - 5, z)   # Basket 바닥으로 이동
+        glTranslated(x, y, z)       # Basket 바닥으로 이동
         glBegin(GL_TRIANGLE_FAN)
         glNormal3d(0, 1, 0)
         sharp = 100                 # Sharpness(선명도) of Ellipse
