@@ -8,6 +8,7 @@ import numpy as np
 import math
 
 from utils import Color, RotateSignal
+from Interface import Player
 
 
 ## A ball. A ball has a radius, a color, a position and its velocity. 
@@ -155,3 +156,49 @@ class Tray():
                            [0,               0,                0, 1]])
 
         self.R = dR @ self.R
+
+class Basket():
+    def __init__(self,
+                 player: Player,
+                 position: np.ndarray,
+                 color: Color,
+                 radius: float = 3.0):
+        self.player = player
+        self.position = position
+        self.color = color
+        self.radius = radius
+
+    def change_position(self, position: np.ndarray):
+        self.position = position
+
+    def render(self):
+        x, y, z = self.position
+
+        ## Basket의 옆면 (Torus * 100으로 구현)
+        for i in range(100):
+            glPushMatrix()
+            glTranslated(x, y - (i * 0.05), z)
+            glRotated(-90, 1.0, 0.0, 0.0)
+            glNormal3d(0, 1, 0)
+            glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, self.color)
+            glutSolidTorus(0.1, self.radius, 10, 50)
+            glPopMatrix()
+
+        ## Bottom of the basket
+        glPushMatrix()
+        glTranslated(x, y - 5, z)   # Basket 바닥으로 이동
+        glBegin(GL_TRIANGLE_FAN)
+        glNormal3d(0, 1, 0)
+        sharp = 100                 # Sharpness(선명도) of Ellipse
+        cycle_degree = 2 * math.pi  # 1 cycle degree = 2 pi
+        glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, self.color)
+        glVertex3f(0, 0, 0)         # centor coordinate
+        for i in range(sharp + 1):
+            unit_theta = cycle_degree / sharp
+            glVertex3f (
+                self.radius * math.cos( i * unit_theta ),  # x = r * cos(theta)
+                0,
+                self.radius * math.sin( i * unit_theta ),  # z = r * sin(theta)
+            )
+        glEnd()
+        glPopMatrix()

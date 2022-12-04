@@ -5,11 +5,11 @@ from OpenGL.GLUT import *
 import numpy as np
 import sys
 
-from Models import Tray, Ball
+from Models import Tray, Ball, Basket
 from Camera import Camera
-from Interface import Scoreboard
+from Interface import Scoreboard, Player
 from Gamesound import Sound
-from utils import Color, RotateSignal
+from utils import Color, RotateSignal, PlayerId
 
 class Viewer:
     def __init__(self):
@@ -25,6 +25,13 @@ class Viewer:
             Ball(0.3, Color.GREEN.value, np.array([0, 6, 0], dtype=np.float64), self.tray),
             Ball(0.2, Color.YELLOW.value, np.array([-3, 3, 0], dtype=np.float64), self.tray),
             Ball(0.1, Color.RED.value, np.array([2, 1, 2], dtype=np.float64), self.tray),
+        ]
+
+        self.player1 = Player(PlayerId.ONE)
+        self.player2 = Player(PlayerId.TWO)
+        self.baskets = [
+            Basket(self.player1, np.array([-10, -8, 0], np.float64), Color.GREY.value),
+            Basket(self.player2, np.array([10, -8, 0], np.float64), Color.RED.value),
         ]
 
     ## Application-specific initialization: Set up global lighting parameters
@@ -56,6 +63,8 @@ class Viewer:
         #################################################
 
         self.tray.render()
+        for basket in self.baskets:
+            basket.render()
         for ball in self.balls:
             ball.update()
         glFlush()
