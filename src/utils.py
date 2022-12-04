@@ -5,15 +5,17 @@ from OpenGL.GLUT import *
 from enum import Enum
 import numpy as np
 
-WINDOW_SIZE = 800
+WINDOW_WIDTH = 1280
+WINDOW_HEIGHT = 840
 
 class Color(Enum):
-    WHITE   = [1, 1, 1]
-    RED     = [255/256, 158/256, 158/256]  # rgb(255, 158, 158)
-    GREEN   = [192/256, 238/256, 228/256]   # rgb(192, 238, 228)
-    YELLOW  = [248/256, 249/256, 136/256]   # rgb(248, 249, 136)
-    MAGENTA = [1, 0, 1]
-    GREY    = [0.4, 0.4, 0.4]
+    WHITE       = [1, 1, 1]
+    RED         = [255/256, 158/256, 158/256]   # rgb(255, 158, 158)
+    LIGHT_BLUE  = [185/256, 224/256, 255/256]   # rgb(185, 224, 255)
+    GREEN       = [192/256, 238/256, 228/256]   # rgb(192, 238, 228)
+    YELLOW      = [248/256, 249/256, 136/256]   # rgb(248, 249, 136)
+    MAGENTA     = [1, 0, 1]
+    GREY        = [0.4, 0.4, 0.4]
 
 class RotateSignal(Enum):
     NEG     = -1        # Negative signal

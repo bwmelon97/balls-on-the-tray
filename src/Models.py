@@ -113,7 +113,6 @@ class Ball():
                 elif self.radius <= 0.5 and 0.08 < abs(self.v[1]) <= 0.15:
                     #print('small and low')
                     sound.small_sound_bounce_l()
-
         ##############################################################################
         
         self.v = vn + vt

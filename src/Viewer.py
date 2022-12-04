@@ -17,7 +17,7 @@ class Viewer:
         self.player1 = Player(PlayerId.ONE)
         self.player2 = Player(PlayerId.TWO)
         self.baskets = [
-            Basket(self.player1, np.array([-10, -12, 0], np.float64), Color.GREY.value),
+            Basket(self.player1, np.array([-10, -12, 0], np.float64), Color.LIGHT_BLUE.value),
             Basket(self.player2, np.array([10, -12, 0], np.float64), Color.RED.value),
         ]
 
@@ -106,7 +106,7 @@ class Viewer:
     def run(self):
         glutInit()                                                  # ? -> maybe initialize gl utilities ?
         glutInitDisplayMode( GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH )  # ?
-        glutInitWindowSize(1200, 840)                               # Set the initial window size
+        glutInitWindowSize(WINDOW_WIDTH, WINDOW_HEIGHT)             # Set the initial window size
         glutInitWindowPosition(0, 0)                                # Set the initial position of window
         glutCreateWindow(b"Computer Graphics Final Project")        # Create window with the title
 
