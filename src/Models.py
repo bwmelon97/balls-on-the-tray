@@ -10,6 +10,8 @@ import math
 from utils import Color, RotateSignal
 from Interface import Player
 
+from Gamesound import Sound
+sound = Sound()
 
 ## A ball. A ball has a radius, a color, a position and its velocity. 
 class Ball():
@@ -35,10 +37,6 @@ class Ball():
         ## Props for movement
         self.v = np.array([0, 0, 0], dtype=np.float64)   # velocity
 
-        ##############################################################################
-        self.colisioncheck = 0
-        ##############################################################################
-
     def check_goal_in(self):
         '''
         Check the ball's center is going throught the enterance of the basket.
@@ -55,6 +53,7 @@ class Ball():
                 self.goal_in = True
                 basket.player.add_score(self.score)
 
+
     def update(self):
         '''
         update the position of the ball for each frame
@@ -66,11 +65,11 @@ class Ball():
         self.check_goal_in()
 
         n = self.tray.getNormalVec()[:3]                        # normal vector of the plain
-
+        
         ## params for physics
         g_p = 1000      # Gravity
         f_p = 0.98      # Friction
-        e_p = 0.3       # elasticity
+        e_p = 0.9      # elasticity
 
         g = np.array([0, -9.8, 0], dtype=np.float64) / g_p      # gravity acceleration (dv)
         self.v += g                                             # add g to the v
@@ -94,16 +93,27 @@ class Ball():
             ## 공을 평면 아래에서 평면의 접점 위치로 올려놓지 않으면,
             ## 올라오는 vn보다 새로 가해지는 중력이 더 크기 때문에 공이 가라앉음
             self.position = self.position + (n * (self.radius - p_dist))
-        
+
         ##############################################################################
-        if dist == self.radius and self.v[1] >= -0.001:
+        if abs(p_dist - self.radius) <= 0.4 and self.v[1] > -0.001:
             if abs(self.v[1]) >= 0.008:
-                if self.radius > 0.7:
-                    self.colisioncheck = 1
-                if self.radius <= 0.7:
-                    self.colisioncheck = 2
-        else:
-            self.colisioncheck = 0
+            
+                if self.radius > 0.5 and abs(self.v[1]) >= 0.15 :
+                    print('big and high')
+                    sound.sound_bounce_h()
+                    
+                elif self.radius > 0.5 and 0.07 < abs(self.v[1]) <= 0.15 :
+                    print('big and low')
+                    sound.sound_bounce_h()
+                  
+                elif self.radius <= 0.5 and abs(self.v[1]) >= 0.15:
+                    print('small and high')
+                    sound.sound_bounce_l()
+                  
+                elif self.radius <= 0.5 and 0.07 < abs(self.v[1]) <= 0.15:
+                    print('small and low')
+                    sound.small_sound_bounce_l()
+
         ##############################################################################
         
         self.v = vn + vt

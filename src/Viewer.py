@@ -29,9 +29,9 @@ class Viewer:
         self.tray = Tray(8)
         self.camera = Camera()
         self.balls = [
-            Ball(0.3, Color.GREEN.value, np.array([0, 6, 0], dtype=np.float64), self.tray, self.baskets, 1),
-            Ball(0.2, Color.YELLOW.value, np.array([-3, 3, 0], dtype=np.float64), self.tray, self.baskets, 2),
-            Ball(0.1, Color.RED.value, np.array([2, 1, 2], dtype=np.float64), self.tray, self.baskets, 3),
+            Ball(1.0, Color.GREEN.value, np.array([0, 8, 0], dtype=np.float64), self.tray, self.baskets, 1),
+            # Ball(0.7, Color.YELLOW.value, np.array([-3, 7, 0], dtype=np.float64), self.tray, self.baskets, 2),
+            Ball(0.4, Color.RED.value, np.array([2, 5, 2], dtype=np.float64), self.tray, self.baskets, 3)
         ]
 
     ## Application-specific initialization: Set up global lighting parameters
@@ -55,11 +55,24 @@ class Viewer:
 
         #################################################
         self.interface.draw()
-        for ball in self.balls:
-            if ball.colisionchecker() == 1:
-                self.sound.bounceball()
-            if ball.colisionchecker() == 2:
-                self.sound.bounceball_s()
+        # for ball in self.balls:
+            # if ball.colisionchecker() == 1:
+            #     self.sound.sound_bounce_h()
+ 
+            # elif ball.colisionchecker() == 2:
+            #     self.sound.sound_bounce_h()
+
+                
+            # elif ball.colisionchecker() == 3:
+                
+            #     self.sound.sound_bounce_l()
+            # elif ball.colisionchecker() == 4:
+                
+            #     self.sound.small_sound_bounce_l()
+        
+        
+        
+        
         #################################################
 
         self.tray.render()
@@ -93,7 +106,7 @@ class Viewer:
             self.tray.rotate(RotateSignal.ZERO, RotateSignal.POS)
         elif key == b's':
             self.tray.rotate(RotateSignal.ZERO, RotateSignal.NEG)
-        elif key == b'p':
+        elif key == b'q':
             self.sound.quit()
         glutPostRedisplay()
 

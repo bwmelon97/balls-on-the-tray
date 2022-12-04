@@ -13,31 +13,44 @@ class Sound():
 
         self.background = pygame.mixer.Sound("sound/background.mp3")
         self.background.set_volume(0.2)
-        self.defeat = pygame.mixer.Sound("sound/jaeap.mp3")
-        self.bounce = pygame.mixer.Sound("sound/bounceball.mp3")
-        self.bounce_s = pygame.mixer.Sound("sound/bounceball.mp3")
-        self.bounce_s.set_volume(0.5)
-        self.background.play()
+        
+        self.bounce_h = pygame.mixer.Sound("sound/bounce_heavy.mp3")
+        self.bounce_l = pygame.mixer.Sound("sound/bounce_light.mp3")
+        
+        self.sbounce_h = pygame.mixer.Sound("sound/bounce_heavy.mp3")
+        self.sbounce_l = pygame.mixer.Sound("sound/bounce_light.mp3")
+        self.sbounce_h.set_volume(0.1)
+        self.sbounce_l.set_volume(0.1)
+        
+        self.bomb = pygame.mixer.Sound("sound/bomb.mp3")
+        self.success2 = pygame.mixer.Sound("sound/success2.mp3")
+        
+        self.end = pygame.mixer.Sound("sound/end.mp3")
+        self.fail = pygame.mixer.Sound("sound/fail.mp3")
+        
+        
+        # self.background.play(-1)
 
-    def gameend(self):
-        # while True:
-            
-        # pygame.display.update()
-        self.gameend.play() # play 안에 -1 을 넣으면 무한반복 (즉 다른 작업과 같이 된다.)
-        
-        # print("hello1")
-        # self.sound2.play(-1)
-        # time.sleep(5)
-        # self.sound2.stop()
-        
-        # self.sound2.play(-1) # play 안에 -1 을 넣으면 무한반복
-        # time.sleep(3)
-        # self.sound2.stop()
          
-    def bounceball(self):
-        self.bounce.play()
-    def bounceball_s(self):
-        self.bounce_s.play() 
+    def sound_bounce_h(self):
+        self.bounce_h.play()
+    def sound_bounce_l(self):
+        self.bounce_l.play()
+        
+    def small_sound_bounce_h(self):
+        self.sbounce_h.play()
+    def small_sound_bounce_l(self):
+        self.sbounce_l.play()
+        
+    def sound_bomb(self):
+        self.bomb.play()
+    def sound_success2(self):
+        self.success2.play()
+    
+    def sound_end(self):
+        self.end.play()
+    def sound_fail(self):
+        self.fail.play()
         
     def quit(self):
         pygame.quit()
