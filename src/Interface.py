@@ -5,6 +5,7 @@ from OpenGL.GLU import *
 from OpenGL.GLUT import *
 
 import numpy as np
+import threading
 
 from utils import Color, PlayerId, drawText
 from Gamesound import Sound
@@ -24,12 +25,15 @@ class Player():
             
         self.score = self.score + score
 
-class Scoreboard():
+class Interface():
     def __init__(self, player_1: Player, player_2: Player):
         self.player_1 = player_1
         self.player_2 = player_2
+
+        self.remain_time = 60
+        self.is_play = False
         
-    def draw(self):
+    def draw_scoreboard(self):
 
         ## for player_1
         p1_score = self.player_1.score
@@ -42,6 +46,17 @@ class Scoreboard():
         drawText(pos, str(p2_score), Color.RED.value)
 
         ## Timer
-        remain_time = 60
         pos = np.array([0, 6.4, 10])
-        drawText(pos, str(remain_time), Color.WHITE.value)
+        drawText(pos, str(self.remain_time), Color.WHITE.value)
+
+    def start(self):
+        self.is_play = True
+        self.time_tick()
+
+    def time_tick(self):
+        if self.is_play == False:
+            return
+        self.remain_time = self.remain_time - 1
+        if self.remain_time <= 0:
+            self.is_play = False
+        threading.Timer(1, self.time_tick).start()

@@ -7,7 +7,7 @@ import sys
 
 from Models import Tray, Ball, Basket
 from Camera import Camera
-from Interface import Scoreboard, Player
+from Interface import Interface, Player
 from Gamesound import Sound
 from utils import *
 
@@ -21,7 +21,7 @@ class Viewer:
             Basket(self.player2, np.array([10, -12, 0], np.float64), Color.RED.value),
         ]
 
-        self.scoreboard = Scoreboard(self.player1, self.player2)
+        self.interface = Interface(self.player1, self.player2)
 
         self.tray = Tray(8)
         self.camera = Camera()
@@ -50,12 +50,14 @@ class Viewer:
                     0.0, -5.0, 0.0,     ## Tray를 스크린 상 위쪽에 위치하도록 함
                     0.0, 1.0, 0.0)
 
-        self.scoreboard.draw()
+        self.interface.draw_scoreboard()
         self.tray.render()
         for basket in self.baskets:
             basket.render()
-        for ball in self.balls:
-            ball.update()
+        if self.interface.is_play == True:
+            for ball in self.balls:
+                ball.update()
+
         glFlush()
         glutSwapBuffers()
 
@@ -82,8 +84,8 @@ class Viewer:
             self.tray.rotate(RotateSignal.ZERO, RotateSignal.POS)
         elif key == b's':
             self.tray.rotate(RotateSignal.ZERO, RotateSignal.NEG)
-        elif key == b'q':
-            self.sound.quit()
+        if self.interface.is_play == False and self.interface.remain_time > 0:
+            self.interface.start()
         glutPostRedisplay()
 
     ## special key handler. Arrows for moving the tray
@@ -96,6 +98,8 @@ class Viewer:
             self.tray.rotate(RotateSignal.ZERO, RotateSignal.POS)
         elif key == GLUT_KEY_DOWN:
             self.tray.rotate(RotateSignal.ZERO, RotateSignal.NEG)
+        if self.interface.is_play == False and self.interface.remain_time > 0:
+            self.interface.start()
         glutPostRedisplay()
 
 
