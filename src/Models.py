@@ -15,11 +15,13 @@ class Ball():
     def __init__(self,
                  radius: float,
                  color: list[float],
-                 position: np.ndarray):
+                 position: np.ndarray,
+                 tray: Tray):
         self.radius = radius
         self.color = color
         self.position = position
-        
+        self.tray = tray
+
         ##############################################################################
         self.colisioncheck = 0
         ##############################################################################
@@ -31,8 +33,8 @@ class Ball():
 
     ## update the position of the ball for each frame
     ## updated position = position + velocity
-    def update(self, n: np.ndarray):
-        n = n[:3]                                               # normal vector of the plain
+    def update(self):
+        n = self.tray.getNormalVec()[:3]                        # normal vector of the plain
 
         ## params for physics
         g_p = 1000      # Gravity
@@ -47,15 +49,20 @@ class Ball():
         vt = self.v - vn                                        # vt = v - vn
         vt = vt * f_p                                           # frictional force
 
-        dist = np.dot(n, self.position) / (np.linalg.norm(n))   # distance between the center of shpere and the plane
-        ## collision detection
-        ## if the shpere becomes under the plane, reflect the vn
-        if dist < self.radius:
-            vn = -vn * e_p
+        ## Collision detection
+        ## if the shpere is in the tray and under the plane, reflect the vn
+        o_dist = np.linalg.norm(self.position)                      # distance between the centor of sphere and the origin
+        p_dist = np.dot(n, self.position) / (np.linalg.norm(n))     # distance between the center of sphere and the plane
 
-            ## 구를 평면 아래에서 평면과 인접한 위치로 올려놓지 않으면,
-            ## vn이 계속 reflect되는 버그가 발생 (순식간에 지면에서 작게 진동)
-            self.position = self.position + (n * (self.radius - dist))
+        ball_is_in_tray = o_dist <= math.sqrt(self.radius ** 2 +    # Check if the ball is in the tray
+                                           self.tray.radius ** 2)   #     o_dist < sqrt(s_r^2 + t_r^2)
+        under_tray = p_dist < self.radius                           # Check if the ball is under the tray
+
+        if ball_is_in_tray and under_tray:
+            vn = -vn * e_p
+            ## 공을 평면 아래에서 평면의 접점 위치로 올려놓지 않으면,
+            ## 올라오는 vn보다 새로 가해지는 중력이 더 크기 때문에 공이 가라앉음
+            self.position = self.position + (n * (self.radius - p_dist))
         
         ##############################################################################
         if dist == self.radius and self.v[1] >= -0.001:
@@ -67,7 +74,6 @@ class Ball():
         else:
             self.colisioncheck = 0
         ##############################################################################
-        
         
         self.v = vn + vt
         self.position = self.position + self.v

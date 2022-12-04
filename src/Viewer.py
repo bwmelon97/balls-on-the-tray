@@ -22,9 +22,9 @@ class Viewer:
         self.tray = Tray(8)
         self.camera = Camera()
         self.balls = [
-            Ball(0.4, Color.GREEN.value, np.array([0, 6, 0], dtype=np.float64)),
-            Ball(0.275, Color.YELLOW.value, np.array([-3, 3, 0], dtype=np.float64)),
-            Ball(0.14, Color.RED.value, np.array([2, 1, 2], dtype=np.float64))
+            Ball(0.3, Color.GREEN.value, np.array([0, 6, 0], dtype=np.float64), self.tray),
+            Ball(0.2, Color.YELLOW.value, np.array([-3, 3, 0], dtype=np.float64), self.tray),
+            Ball(0.1, Color.RED.value, np.array([2, 1, 2], dtype=np.float64), self.tray),
         ]
 
     ## Application-specific initialization: Set up global lighting parameters
@@ -57,7 +57,7 @@ class Viewer:
 
         self.tray.render()
         for ball in self.balls:
-            ball.update(self.tray.getNormalVec())
+            ball.update()
         glFlush()
         glutSwapBuffers()
 
