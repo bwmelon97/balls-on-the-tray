@@ -57,7 +57,7 @@ class Viewer:
 
         self.tray.render()
         for ball in self.balls:
-            ball.update()
+            ball.update(self.tray.getNormalVec())
         glFlush()
         glutSwapBuffers()
 

@@ -31,31 +31,31 @@ class Ball():
 
     ## update the position of the ball for each frame
     ## updated position = position + velocity
-    def update(self):
-        n = np.array([0, 1, 0], dtype=np.float64)               # normal vector of the plain
+    def update(self, n: np.ndarray):
+        n = n[:3]                                               # normal vector of the plain
 
-        g = np.array([0, -9.8, 0], dtype=np.float64) / 3000     # gravity acceleration (dv)
+        ## params for physics
+        g_p = 1000      # Gravity
+        f_p = 0.98      # Friction
+        e_p = 0.3       # elasticity
+
+        g = np.array([0, -9.8, 0], dtype=np.float64) / g_p      # gravity acceleration (dv)
         self.v += g                                             # add g to the v
 
         ## v can devide into vn and vt (v = vn + vt)
         vn = n * np.dot(self.v, n)                              # n direction vecotr of v
         vt = self.v - vn                                        # vt = v - vn
+        vt = vt * f_p                                           # frictional force
 
         dist = np.dot(n, self.position) / (np.linalg.norm(n))   # distance between the center of shpere and the plane
         ## collision detection
         ## if the shpere becomes under the plane, reflect the vn
         if dist < self.radius:
-            vn = -vn * 0.7
-            self.v = vn + vt
+            vn = -vn * e_p
 
             ## 구를 평면 아래에서 평면과 인접한 위치로 올려놓지 않으면,
             ## vn이 계속 reflect되는 버그가 발생 (순식간에 지면에서 작게 진동)
             self.position = self.position + (n * (self.radius - dist))
-            ## self.position = self.position + self.v   # -> 버그 시현
-        
-        else:
-            self.v = vn + vt
-            self.position = self.position + self.v
         
         ##############################################################################
         if dist == self.radius and self.v[1] >= -0.001:
@@ -69,6 +69,8 @@ class Ball():
         ##############################################################################
         
         
+        self.v = vn + vt
+        self.position = self.position + self.v
         self.render()
         
     ## Render the ball
