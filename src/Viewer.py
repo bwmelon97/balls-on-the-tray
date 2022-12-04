@@ -74,18 +74,21 @@ class Viewer:
         glutPostRedisplay()
         glutTimerFunc(20, self.timer, 0)   # 50 updates per 1 sec
 
-
-    ########################
-    # 임시로 만듬 pygame handler
-    ########################
+    ## Keyboard handler. wasd for moving the tray, p for quit the sound
     def keyboard(self, key, x, y):
-        if key == b'q':
+        if key == b'a':
+            self.tray.rotate(RotateSignal.NEG, RotateSignal.ZERO)
+        elif key == b'd':
+            self.tray.rotate(RotateSignal.POS, RotateSignal.ZERO)
+        elif key == b'w':
+            self.tray.rotate(RotateSignal.ZERO, RotateSignal.POS)
+        elif key == b's':
+            self.tray.rotate(RotateSignal.ZERO, RotateSignal.NEG)
+        elif key == b'p':
             self.sound.quit()
-            
+        glutPostRedisplay()
 
-
-
-    ## Moves the camera according to the key pressed, then ask to refresh the display.
+    ## special key handler. Arrows for moving the tray
     def special(self, key, x, y):
         if key == GLUT_KEY_LEFT:
             self.tray.rotate(RotateSignal.NEG, RotateSignal.ZERO)
@@ -107,6 +110,7 @@ class Viewer:
 
         glutDisplayFunc(self.display)           # Bind the display function
         glutReshapeFunc(self.reshape)           # Bind the Reshape function
+        glutKeyboardFunc(self.keyboard)         # Bind the keyboard function
         glutSpecialFunc(self.special)           # Bind the special key function
         glutTimerFunc(100, self.timer, 0)       # Start the timer
         
