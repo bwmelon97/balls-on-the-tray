@@ -1,4 +1,9 @@
+from OpenGL.GL import *
+from OpenGL.GLU import *
+from OpenGL.GLUT import *
+
 from enum import Enum
+import numpy as np
 
 WINDOW_SIZE = 800
 
@@ -18,3 +23,23 @@ class RotateSignal(Enum):
 class PlayerId(Enum):
     ONE = 1
     TWO = 2
+
+def drawText(position: np.ndarray, text: str, color: Color = Color.WHITE.value):
+    '''
+    postion: Text Position
+    text: content of the text
+    color: color of the text
+
+    Render a text object
+    '''
+    x, y, z = position
+    r, g, b = color
+
+    glPushMatrix()
+    glDisable(GL_LIGHTING)
+    glColor3f(r, g, b)
+    glRasterPos3f(x, y, z)
+    for c in text:
+        glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, ord(c))
+    glEnable(GL_LIGHTING)
+    glPopMatrix()
