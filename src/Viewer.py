@@ -3,7 +3,9 @@ from OpenGL.GLU import *
 from OpenGL.GLUT import *
 
 import numpy as np
-import sys
+import math
+import random
+import threading
 
 from Models import Tray, Ball, Basket
 from Camera import Camera
@@ -17,8 +19,8 @@ class Viewer:
         self.player1 = Player(PlayerId.ONE)
         self.player2 = Player(PlayerId.TWO)
         self.baskets = [
-            Basket(self.player1, np.array([-10, -12, 0], np.float64), Color.LIGHT_BLUE.value),
-            Basket(self.player2, np.array([10, -12, 0], np.float64), Color.RED.value),
+            Basket(self.player1, np.array([-8, -12, 0], np.float64), Color.LIGHT_BLUE.value, 4),
+            Basket(self.player2, np.array([8, -12, 0], np.float64), Color.RED.value, 4),
         ]
 
         self.interface = Interface(self.player1, self.player2)
@@ -26,10 +28,69 @@ class Viewer:
         self.tray = Tray(8)
         self.camera = Camera()
         self.balls = [
-            Ball(0.3, Color.GREEN.value, np.array([0, 8, 0], dtype=np.float64), self.tray, self.baskets, 1),
-            Ball(0.2, Color.YELLOW.value, np.array([-3, 7, 0], dtype=np.float64), self.tray, self.baskets, 2),
-            Ball(0.1, Color.RED.value, np.array([2, 5, 2], dtype=np.float64), self.tray, self.baskets, 3)
+            Ball(0.5, Color.GREEN.value, np.array([0, 8, 0], dtype=np.float64), self.tray, self.baskets, 1),
+            Ball(0.5, Color.YELLOW.value, np.array([-3, 7, 0], dtype=np.float64), self.tray, self.baskets, 1),
+            Ball(0.3, Color.RED.value, np.array([2, 5, 2], dtype=np.float64), self.tray, self.baskets, 2)
         ]
+        self.tick()
+
+    def tick(self):
+        p = random.random()
+        q = random.random()
+
+        if self.interface.is_play and p < 0.7:
+            self.add_ball()
+
+        if self.interface.is_play and q < 0.2:
+            self.move_basket()
+
+        threading.Timer(1, self.tick).start()
+
+    def add_ball(self):
+        color_list: list(Color) = [
+            Color.LIGHT_BLUE.value,
+            Color.RED.value,
+            Color.GREEN.value,
+            Color.YELLOW.value,
+            Color.WHITE.value,
+        ]
+        rand_idx: int = random.randint(0, len(color_list) - 1)
+        random_color: Color = color_list[rand_idx]
+
+        r_x = random.random() * 6 - 3
+        r_y = 7
+        r_z = random.random() * 6 - 3
+        random_pos: np.ndarray = np.array([r_x, r_y, r_z])
+
+        bomb = Ball(1, Color.BLACK.value, random_pos, self.tray, self.baskets, -3)  # 10%
+        basic = Ball(0.5, random_color, random_pos, self.tray, self.baskets, 1)     # 60%
+        double = Ball(0.3, random_color, random_pos, self.tray, self.baskets, 2)    # 30%
+
+        p = random.random()
+        if p <= 0.1:
+            new_ball = bomb
+        elif p <= 0.4:
+            new_ball = double
+        else:
+            new_ball = basic
+
+        self.balls.append(new_ball)
+
+    def move_basket(self):
+        r_theta_1 = random.random() * 2 * math.pi
+        r_theta_2 = random.random() * 2 * math.pi
+
+        while abs(r_theta_1 - r_theta_2) < (math.pi / 2):
+            r_theta_2 = random.random() * 2 * math.pi
+
+        r_ts = [r_theta_1, r_theta_2]
+
+        for idx, basket in enumerate(self.baskets):
+            r_theta = r_ts[idx]
+            x = 8 * math.cos(r_theta)
+            z = 8 * math.sin(r_theta)
+            new_pos = np.array([x, -12, z], np.float64)
+            basket.change_position(new_pos)
 
     ## Application-specific initialization: Set up global lighting parameters
     ## and create display lists.

@@ -68,7 +68,7 @@ class Ball():
         
         ## params for physics
         g_p = 1000      # Gravity
-        f_p = 0.95      # Friction
+        f_p = 0.98      # Friction
         e_p = 0.3       # elasticity
 
         g = np.array([0, -9.8, 0], dtype=np.float64) / g_p      # gravity acceleration (dv)

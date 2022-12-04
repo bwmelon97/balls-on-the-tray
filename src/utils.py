@@ -14,8 +14,8 @@ class Color(Enum):
     LIGHT_BLUE  = [185/256, 224/256, 255/256]   # rgb(185, 224, 255)
     GREEN       = [192/256, 238/256, 228/256]   # rgb(192, 238, 228)
     YELLOW      = [248/256, 249/256, 136/256]   # rgb(248, 249, 136)
-    MAGENTA     = [1, 0, 1]
     GREY        = [0.4, 0.4, 0.4]
+    BLACK       = [0, 0, 0]
 
 class RotateSignal(Enum):
     NEG     = -1        # Negative signal
