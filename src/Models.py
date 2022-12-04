@@ -17,24 +17,54 @@ class Ball():
                  radius: float,
                  color: list[float],
                  position: np.ndarray,
-                 tray: Tray):
+                 tray: Tray,
+                 baskets: list[Basket],
+                 score: int):
         self.radius = radius
         self.color = color
         self.position = position
+
+        ## object infos
         self.tray = tray
+        self.baskets = baskets
+
+        ## Props for score
+        self.score = score
+        self.goal_in: bool = False
+
+        ## Props for movement
+        self.v = np.array([0, 0, 0], dtype=np.float64)   # velocity
 
         ##############################################################################
         self.colisioncheck = 0
         ##############################################################################
-        
-        
-        ## properties for movement
-        self.v = np.array([0, 0, 0], dtype=np.float64)   # velocity
-        
 
-    ## update the position of the ball for each frame
-    ## updated position = position + velocity
+    def check_goal_in(self):
+        '''
+        Check the ball's center is going throught the enterance of the basket.
+        (is it under the hight of basket enterance plane &
+         distance between ball_center & center of basket enterance < radius of basket enterance)
+        if it is going throught the basket, add the score to the player.
+        '''
+        for basket in self.baskets:
+            is_under_basket = self.position[1] - basket.position[1]
+            bb_dist = np.linalg.norm(self.position - basket.position)   # distance between ball and basket
+            is_in_basket = bb_dist < basket.radius
+
+            if is_under_basket and is_in_basket:
+                self.goal_in = True
+                basket.player.add_score(self.score)
+
     def update(self):
+        '''
+        update the position of the ball for each frame
+        updated position = position + velocity
+        '''
+        ## if the ball is in the basket, do not render
+        if self.goal_in:
+            return
+        self.check_goal_in()
+
         n = self.tray.getNormalVec()[:3]                        # normal vector of the plain
 
         ## params for physics

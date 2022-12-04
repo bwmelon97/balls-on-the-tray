@@ -19,19 +19,19 @@ class Viewer:
         self.sound = Sound()
         #################################################
         
-        self.tray = Tray(8)
-        self.camera = Camera()
-        self.balls = [
-            Ball(0.3, Color.GREEN.value, np.array([0, 6, 0], dtype=np.float64), self.tray),
-            Ball(0.2, Color.YELLOW.value, np.array([-3, 3, 0], dtype=np.float64), self.tray),
-            Ball(0.1, Color.RED.value, np.array([2, 1, 2], dtype=np.float64), self.tray),
-        ]
-
         self.player1 = Player(PlayerId.ONE)
         self.player2 = Player(PlayerId.TWO)
         self.baskets = [
-            Basket(self.player1, np.array([-10, -8, 0], np.float64), Color.GREY.value),
-            Basket(self.player2, np.array([10, -8, 0], np.float64), Color.RED.value),
+            Basket(self.player1, np.array([-10, -12, 0], np.float64), Color.GREY.value),
+            Basket(self.player2, np.array([10, -12, 0], np.float64), Color.RED.value),
+        ]
+
+        self.tray = Tray(8)
+        self.camera = Camera()
+        self.balls = [
+            Ball(0.3, Color.GREEN.value, np.array([0, 6, 0], dtype=np.float64), self.tray, self.baskets, 1),
+            Ball(0.2, Color.YELLOW.value, np.array([-3, 3, 0], dtype=np.float64), self.tray, self.baskets, 2),
+            Ball(0.1, Color.RED.value, np.array([2, 1, 2], dtype=np.float64), self.tray, self.baskets, 3),
         ]
 
     ## Application-specific initialization: Set up global lighting parameters
