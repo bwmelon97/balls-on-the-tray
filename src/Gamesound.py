@@ -29,7 +29,7 @@ class Sound():
         self.fail = pygame.mixer.Sound("sound/fail.mp3")
         
         
-        # self.background.play(-1)
+        self.background.play(-1)
 
          
     def sound_bounce_h(self):
