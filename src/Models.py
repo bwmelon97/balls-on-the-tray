@@ -20,6 +20,11 @@ class Ball():
         self.color = color
         self.position = position
         
+        ##############################################################################
+        self.colisioncheck = 0
+        ##############################################################################
+        
+        
         ## properties for movement
         self.v = np.array([0, 0, 0], dtype=np.float64)   # velocity
         
@@ -52,6 +57,18 @@ class Ball():
             self.v = vn + vt
             self.position = self.position + self.v
         
+        ##############################################################################
+        if dist == self.radius and self.v[1] >= -0.001:
+            if abs(self.v[1]) >= 0.008:
+                if self.radius > 0.7:
+                    self.colisioncheck = 1
+                if self.radius <= 0.7:
+                    self.colisioncheck = 2
+        else:
+            self.colisioncheck = 0
+        ##############################################################################
+        
+        
         self.render()
         
     ## Render the ball
@@ -62,6 +79,11 @@ class Ball():
         glTranslated(x, y, z)
         glutSolidSphere(self.radius, 30, 30)
         glPopMatrix()
+        
+    def colisionchecker(self):
+        if self.colisioncheck == 1:
+            print("colision v : ", self.v[1])
+            return 1
 
 
 

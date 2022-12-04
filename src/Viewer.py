@@ -3,18 +3,27 @@ from OpenGL.GLU import *
 from OpenGL.GLUT import *
 
 import numpy as np
+import sys
 
 from Models import Tray, Ball
 from Camera import Camera
 from utils import Color
+from Interface import Scoreboard
+from Gamesound import Sound
 
 class Viewer:
     def __init__(self):
+        
+        #################################################
+        self.interface = Scoreboard(6,3,0.3)
+        self.sound = Sound()
+        #################################################
+        
         self.tray = Tray(8)
         self.camera = Camera()
         self.balls = [
-            Ball(1, Color.GREEN.value, np.array([0, 6, 0], dtype=np.float64)),
-            Ball(0.75, Color.YELLOW.value, np.array([-3, 3, 0], dtype=np.float64)),
+            Ball(1, Color.GREEN.value, np.array([0, 10, 0], dtype=np.float64)),
+            Ball(0.75, Color.YELLOW.value, np.array([-3, 6, 0], dtype=np.float64)),
             Ball(0.4, Color.RED.value, np.array([2, 1, 2], dtype=np.float64))
         ]
 
@@ -38,6 +47,15 @@ class Viewer:
                     0.0, 0.0, 0.0,
                     0.0, 1.0, 0.0)
         self.tray.draw()
+        
+        #################################################
+        self.interface.draw()
+        for ball in self.balls:
+            if ball.colisionchecker() == 1:
+                self.sound.bounceball()
+            if ball.colisionchecker() == 2:
+                self.sound.bounceball_s()
+        #################################################
         for ball in self.balls:
             ball.update()
         glFlush()
@@ -55,6 +73,17 @@ class Viewer:
     def timer(self, v):
         glutPostRedisplay()
         glutTimerFunc(20, self.timer, 0)   # 50 updates per 1 sec
+
+
+    ########################
+    # 임시로 만듬 pygame handler
+    ########################
+    def keyboard(self, key, x, y):
+        if key == b'q':
+            self.sound.quit()
+            
+
+
 
     ## Moves the camera according to the key pressed, then ask to refresh the display.
     def special(self, key, x, y):
@@ -80,6 +109,11 @@ class Viewer:
         glutReshapeFunc(self.reshape)           # Bind the Reshape function
         glutSpecialFunc(self.special)           # Bind the special key function
         glutTimerFunc(100, self.timer, 0)       # Start the timer
+        
+        ###############################
+        glutKeyboardFunc(self.keyboard)
+        # self.sound.play()
+        ###############################
 
         self.init()
         glutMainLoop()                          # Make the program not terminate
