@@ -16,7 +16,7 @@ class Viewer:
         
         #################################################
         self.interface = Scoreboard(6,3,0.3)
-        self.sound = Sound()
+        
         #################################################
         
         self.player1 = Player(PlayerId.ONE)
@@ -55,23 +55,6 @@ class Viewer:
 
         #################################################
         self.interface.draw()
-        # for ball in self.balls:
-            # if ball.colisionchecker() == 1:
-            #     self.sound.sound_bounce_h()
- 
-            # elif ball.colisionchecker() == 2:
-            #     self.sound.sound_bounce_h()
-
-                
-            # elif ball.colisionchecker() == 3:
-                
-            #     self.sound.sound_bounce_l()
-            # elif ball.colisionchecker() == 4:
-                
-            #     self.sound.small_sound_bounce_l()
-        
-        
-        
         
         #################################################
 

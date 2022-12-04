@@ -69,7 +69,7 @@ class Ball():
         ## params for physics
         g_p = 1000      # Gravity
         f_p = 0.98      # Friction
-        e_p = 0.9      # elasticity
+        e_p = 0.7      # elasticity
 
         g = np.array([0, -9.8, 0], dtype=np.float64) / g_p      # gravity acceleration (dv)
         self.v += g                                             # add g to the v
@@ -99,19 +99,19 @@ class Ball():
             if abs(self.v[1]) >= 0.008:
             
                 if self.radius > 0.5 and abs(self.v[1]) >= 0.15 :
-                    print('big and high')
+                    # print('big and high')
                     sound.sound_bounce_h()
                     
-                elif self.radius > 0.5 and 0.07 < abs(self.v[1]) <= 0.15 :
-                    print('big and low')
+                elif self.radius > 0.5 and 0.08 < abs(self.v[1]) <= 0.15 :
+                    #print('big and low')
                     sound.sound_bounce_h()
                   
                 elif self.radius <= 0.5 and abs(self.v[1]) >= 0.15:
-                    print('small and high')
+                    #print('small and high')
                     sound.sound_bounce_l()
                   
-                elif self.radius <= 0.5 and 0.07 < abs(self.v[1]) <= 0.15:
-                    print('small and low')
+                elif self.radius <= 0.5 and 0.08 < abs(self.v[1]) <= 0.15:
+                    #print('small and low')
                     sound.small_sound_bounce_l()
 
         ##############################################################################
