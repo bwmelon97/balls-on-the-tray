@@ -69,7 +69,7 @@ class Ball():
         ## params for physics
         g_p = 1000      # Gravity
         f_p = 0.98      # Friction
-        e_p = 0.3       # elasticity
+        e_p = 0.5       # elasticity
 
         g = np.array([0, -9.8, 0], dtype=np.float64) / g_p      # gravity acceleration (dv)
         self.v += g                                             # add g to the v
@@ -102,7 +102,7 @@ class Ball():
                     # print('big and high')
                     sound.sound_bounce_h()
                     
-                elif self.radius > 0.5 and 0.08 < abs(self.v[1]) <= 0.15 :
+                elif self.radius > 0.5 and 0.03 < abs(self.v[1]) <= 0.15 :
                     #print('big and low')
                     sound.sound_bounce_h()
                   
@@ -110,7 +110,7 @@ class Ball():
                     #print('small and high')
                     sound.sound_bounce_l()
                   
-                elif self.radius <= 0.5 and 0.08 < abs(self.v[1]) <= 0.15:
+                elif self.radius <= 0.5 and 0.03 < abs(self.v[1]) <= 0.15:
                     #print('small and low')
                     sound.small_sound_bounce_l()
         ##############################################################################
@@ -174,8 +174,8 @@ class Tray():
         glPopMatrix()
 
     def rotate(self, x_sig: RotateSignal, z_sig: RotateSignal):
-        theta = -(1 / 50)
-
+        # theta = -(1 / 50)
+        theta = -(1.5 / 50)
         ## 위 아래 키 입력인 경우, yz plane을 따라 회전
         if x_sig.value == RotateSignal.ZERO.value:
             if z_sig.value == RotateSignal.NEG.value:

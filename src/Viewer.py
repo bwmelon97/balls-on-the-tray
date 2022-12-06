@@ -10,7 +10,7 @@ import threading
 from Models import Tray, Ball, Basket
 from Camera import Camera
 from Interface import Interface, Player
-from Gamesound import Sound
+# from Gamesound import Sound
 from utils import *
 
 class Viewer:
@@ -19,8 +19,8 @@ class Viewer:
         self.player1 = Player(PlayerId.ONE)
         self.player2 = Player(PlayerId.TWO)
         self.baskets = [
-            Basket(self.player1, np.array([-8, -12, 0], np.float64), Color.LIGHT_BLUE.value, 4),
-            Basket(self.player2, np.array([8, -12, 0], np.float64), Color.RED.value, 4),
+            Basket(self.player1, np.array([-8, -12, 0], np.float64), Color.LIGHT_BLUE.value, 5),
+            Basket(self.player2, np.array([8, -12, 0], np.float64), Color.RED.value, 5),
         ]
 
         self.interface = Interface(self.player1, self.player2)
@@ -62,14 +62,14 @@ class Viewer:
         r_z = random.random() * 6 - 3
         random_pos: np.ndarray = np.array([r_x, r_y, r_z])
 
-        bomb = Ball(1, Color.BLACK.value, random_pos, self.tray, self.baskets, -3)  # 10%
-        basic = Ball(0.5, random_color, random_pos, self.tray, self.baskets, 1)     # 60%
-        double = Ball(0.3, random_color, random_pos, self.tray, self.baskets, 2)    # 30%
+        bomb = Ball(1, Color.BLACK.value, random_pos, self.tray, self.baskets, -3)  # 20%
+        basic = Ball(0.6, random_color, random_pos, self.tray, self.baskets, 1)     # 50%
+        double = Ball(0.4, random_color, random_pos, self.tray, self.baskets, 2)    # 30%
 
         p = random.random()
-        if p <= 0.1:
+        if p <= 0.2:
             new_ball = bomb
-        elif p <= 0.4:
+        elif p <= 0.5:
             new_ball = double
         else:
             new_ball = basic

@@ -11,6 +11,7 @@ from utils import Color, PlayerId, drawText
 from Gamesound import Sound
 
 sound = Sound()
+sound.sound_background()
 
 class Player():
     def __init__(self, player_id: PlayerId):
@@ -30,7 +31,7 @@ class Interface():
         self.player_1 = player_1
         self.player_2 = player_2
 
-        self.remain_time = 60
+        self.remain_time = 50
         self.is_play = False
         
     def draw_scoreboard(self):
@@ -57,6 +58,9 @@ class Interface():
         if self.is_play == False:
             return
         self.remain_time = self.remain_time - 1
+        if self.remain_time == 0:
+            sound.sound_end()
+        
         if self.remain_time <= 0:
             self.is_play = False
         threading.Timer(1, self.time_tick).start()

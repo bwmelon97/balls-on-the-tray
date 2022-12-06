@@ -12,25 +12,33 @@ class Sound():
 
 
         self.background = pygame.mixer.Sound("sound/background.mp3")
-        self.background.set_volume(0.2)
+        self.background.set_volume(2.0)
         
         self.bounce_h = pygame.mixer.Sound("sound/bounce_heavy.mp3")
         self.bounce_l = pygame.mixer.Sound("sound/bounce_light.mp3")
+        self.bounce_h.set_volume(2.0)
+        self.bounce_l.set_volume(2.0)
         
         self.sbounce_h = pygame.mixer.Sound("sound/bounce_heavy.mp3")
         self.sbounce_l = pygame.mixer.Sound("sound/bounce_light.mp3")
-        self.sbounce_h.set_volume(0.1)
-        self.sbounce_l.set_volume(0.1)
+        self.sbounce_h.set_volume(1.2)
+        self.sbounce_l.set_volume(1.2)
         
         self.bomb = pygame.mixer.Sound("sound/bomb.mp3")
         self.success2 = pygame.mixer.Sound("sound/success2.mp3")
+        self.bomb.set_volume(8.0)
+        self.success2.set_volume(1.3)
         
         self.end = pygame.mixer.Sound("sound/end.mp3")
         self.fail = pygame.mixer.Sound("sound/fail.mp3")
+        self.end.set_volume(3.0)
+        self.fail.set_volume(3.0)
         
         
-        self.background.play(-1)
+        # self.background.play(-1)
 
+    def sound_background(self):
+        self.background.play(-1)
          
     def sound_bounce_h(self):
         self.bounce_h.play()
