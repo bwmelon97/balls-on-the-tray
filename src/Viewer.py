@@ -44,7 +44,7 @@ class Viewer:
         if self.interface.is_play and q < 0.2:
             self.move_basket()
 
-        threading.Timer(1, self.tick).start()
+        threading.Timer(0.5, self.tick).start()
 
     def add_ball(self):
         color_list: list(Color) = [

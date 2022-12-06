@@ -175,7 +175,7 @@ class Tray():
 
     def rotate(self, x_sig: RotateSignal, z_sig: RotateSignal):
         # theta = -(1 / 50)
-        theta = -(1.5 / 50)
+        theta = -(3 / 50)
         ## 위 아래 키 입력인 경우, yz plane을 따라 회전
         if x_sig.value == RotateSignal.ZERO.value:
             if z_sig.value == RotateSignal.NEG.value:
