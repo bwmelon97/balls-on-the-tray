@@ -17,13 +17,12 @@ class Player():
     def __init__(self, player_id: PlayerId):
         self.id: PlayerId = player_id
         self.score: int = 0
+
     def add_score(self, score: int):
-        
         if score > 0:
             sound.sound_success2()
         else:
             sound.sound_bomb()
-            
         self.score = self.score + score
 
 class Interface():

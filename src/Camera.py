@@ -22,6 +22,10 @@ class Camera():
     def getZ(self):
         return self.dist * math.sin(self.theta)
 
+
+    ## Methods to set the camera position
+    ## This methods used to check the initial setting for developing,
+    ## but they are not used in the user's playtime.
     def moveRight(self):
         self.theta = self.theta + self.dTheta
 

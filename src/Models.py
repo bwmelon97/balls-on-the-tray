@@ -39,10 +39,10 @@ class Ball():
 
     def check_goal_in(self):
         '''
-        Check the ball's center is going throught the enterance of the basket.
-        (is it under the hight of basket enterance plane &
-         distance between ball_center & center of basket enterance < radius of basket enterance)
-        if it is going throught the basket, add the score to the player.
+        Check the ball's center is going through the bottom of the basket.
+        (is it under the hight of basket bottom plane &
+         distance between ball_center & center of basket bottom < radius of basket bottom)
+        if it is going through the basket, add the score to the player.
         '''
         for basket in self.baskets:
             is_under_basket = self.position[1] - basket.position[1]
@@ -69,7 +69,7 @@ class Ball():
         ## params for physics
         g_p = 1000      # Gravity
         f_p = 0.98      # Friction
-        e_p = 0.5       # elasticity
+        e_p = 0.3       # elasticity
 
         g = np.array([0, -9.8, 0], dtype=np.float64) / g_p      # gravity acceleration (dv)
         self.v += g                                             # add g to the v
@@ -127,7 +127,9 @@ class Ball():
         glTranslated(x, y, z)
         glutSolidSphere(self.radius, 30, 30)
         glPopMatrix()
-        
+
+
+    ## [Soogeun]: Where this method is used?
     def colisionchecker(self):
         if self.colisioncheck == 1:
             print("colision v : ", self.v[1])
@@ -146,6 +148,29 @@ class Tray():
 
     def getNormalVec(self) -> np.ndarray:
         return self.R @ self.n
+
+    def rotate(self, x_sig: RotateSignal, z_sig: RotateSignal):
+        # theta = -(1 / 50)
+        theta = -(3 / 50)
+        ## 위 아래 키 입력인 경우, yz plane을 따라 회전
+        if x_sig.value == RotateSignal.ZERO.value:
+            if z_sig.value == RotateSignal.NEG.value:
+                theta = -theta
+            dR = np.array([[1, 0,               0,                0],
+                           [0, math.cos(theta), -math.sin(theta), 0],
+                           [0, math.sin(theta), math.cos(theta),  0],
+                           [0, 0,               0,                1]])
+
+        ## 좌우 키 입력인 경우, xy plane을 따라 회적
+        else:
+            if x_sig.value == RotateSignal.NEG.value:
+                theta = -theta
+            dR = np.array([[math.cos(theta), -math.sin(theta), 0, 0],
+                           [math.sin(theta), math.cos(theta),  0, 0],
+                           [0,               0,                1, 0],
+                           [0,               0,                0, 1]])
+
+        self.R = dR @ self.R
 
     def render(self):
         # Spot light
@@ -173,28 +198,6 @@ class Tray():
         glEnd()
         glPopMatrix()
 
-    def rotate(self, x_sig: RotateSignal, z_sig: RotateSignal):
-        # theta = -(1 / 50)
-        theta = -(3 / 50)
-        ## 위 아래 키 입력인 경우, yz plane을 따라 회전
-        if x_sig.value == RotateSignal.ZERO.value:
-            if z_sig.value == RotateSignal.NEG.value:
-                theta = -theta
-            dR = np.array([[1, 0,               0,                0],
-                           [0, math.cos(theta), -math.sin(theta), 0],
-                           [0, math.sin(theta), math.cos(theta),  0],
-                           [0, 0,               0,                1]])
-
-        ## 좌우 키 입력인 경우, xy plane을 따라 회적
-        else:
-            if x_sig.value == RotateSignal.NEG.value:
-                theta = -theta
-            dR = np.array([[math.cos(theta), -math.sin(theta), 0, 0],
-                           [math.sin(theta), math.cos(theta),  0, 0],
-                           [0,               0,                1, 0],
-                           [0,               0,                0, 1]])
-
-        self.R = dR @ self.R
 
 class Basket():
     def __init__(self,
